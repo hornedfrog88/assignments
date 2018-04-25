@@ -1,9 +1,44 @@
 ---
-title: "Model Performance"
-author: "cbrown"
-date: "April 11, 2018"
-output: html_document
+title: "Project-Performance-Predicting Course Enrollment"
+author: "Rich McGowan"
+date: "April 22, 2018"
+output: 
+       html_document:
+                  toc: FALSE
+                  theme: united
 ---
+#### The purpose of this analysis is to perform some basic ("naive") executions of the model.
 
-This is the document for tracking model performance ...
+#### The first step is to initialize the project: After the project has been created in the target directory make sure the ProjectTemplate package is installed and loaded.  The COURSE_CAPACITY_DATA.csv and TOTAL_ENRL_ATTEMPTS_BY_COURSE files have been moved into the data folder of the project and will be loaded into the Environment.  This will also load all necessary packages (designated in the config file of the project).
+```{r load project, include=FALSE }
+library('ProjectTemplate')
+load.project()
+```
+
+#### The COURSE_CAPACITY_DATA.csv file contains approximately 13K rows of course schedule statisics for terms between Fall of 2016 and the Spring of 2018.  The data frame is intended to facilitate the prediction of ultimate Enrollment Totals per scheduled course (for all primary/enrollmment scheduled sections). 
+```{r convert raw data frame to local data frame}
+course_capacity_local <- tbl_df(COURSE.CAPACITY.DATA)
+```
+
+#### Clean the course_capacity_local dataframe of extreme outlyers (i.e. remove any courses that are more than 200% percent full). 
+```{r clean the local data frame of outlyers}
+clean_course_capacity_local <- course_capacity_local %>% filter(PercentFull<=2.0)
+```
+
+#### Plot some data points from the local data frame: visualize the relationship between the Total Course Capacity and Total Enrolled Students.
+```{r points plot}
+ggplot(clean_course_capacity_local, aes(x= TotalCapacity, y = EnrlTotal)) + geom_point() + labs(x = 'Enrollment Capacity', y = 'Total Enrolled Students')
+```
+
+#### Run a simple linear regression using Total Course Capacity as the lone linear predictor of the response variable Enrollment Total.  Show the results of the linear regression stored in an object called "model1"
+```{r simple linear regression}
+model1 <- lm(EnrlTotal~TotalCapacity,data = clean_course_capacity_local)
+summary(model1)
+```
+#### Add a regression line to the original plot
+```{r add regression line to the plot}
+ggplot(clean_course_capacity_local, aes(x= TotalCapacity, y = EnrlTotal)) + geom_point(color='blue') + geom_smooth(method = "lm", se = FALSE, color='Red') + labs(x = 'Enrollment Capacity', y = 'Total Enrolled Students')
+```
+
+
 
