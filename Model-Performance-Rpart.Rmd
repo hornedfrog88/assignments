@@ -59,4 +59,4 @@ MeanAbsoluteError <- MAE(test_data_minimized$EnrlTotal,predict_rpart)
 print(paste("The Mean Absolute Error of the Prediction is", round(MeanAbsoluteError, digits = 2)))
 ```
 
-## CONCLUSION-The Recursive Partitiion Regression Tree Model resulted in a Mean Absolute Error of the predicted Total Enrollment by Course is well witin the acceptable range since there are courses and class sections that have very large enrollment capacities.  
+## CONCLUSION-The Recursive Partition Regression Tree Model resulted in a Mean Absolute Error of the predicted Total Enrollment by Course is well witin the acceptable range since there are courses and class sections that have very large enrollment capacities.  
