@@ -146,8 +146,8 @@ total_enrl_attempts_local &lt;- tbl_df(TOTAL.ENRL.ATTEMPTS.BY.COURSE)</code></pr
 <pre class="r"><code>training_data_local &lt;- combined_data_local %&gt;% filter(Term &lt; 2182)
 test_data_local &lt;- combined_data_local %&gt;% filter(Term &gt;= 2182)</code></pre>
 </div>
-<div id="minimize-select-columns-of-the-training_data_local-and-test_data_local-datasets-to-minimized-them-so-they-only-include-variables-of-interest-to-the-model." class="section level4">
-<h4>Minimize (select columns) of the training_data_local and test_data_local datasets to minimized them so they only include variables of interest to the model.</h4>
+<div id="exclude-columns-of-the-training_data_local-and-test_data_local-datasets-to-minimized-them-so-they-only-include-variables-of-interest-to-the-model." class="section level4">
+<h4>Exclude columns of the training_data_local and test_data_local datasets to minimized them so they only include variables of interest to the model.</h4>
 <pre class="r"><code>training_data_minimized &lt;- training_data_local %&gt;% select(EnrlTotal, TotalSections, TotalCapacity,TotalAttempts)
 test_data_minimized &lt;- test_data_local %&gt;% select(EnrlTotal, TotalSections, TotalCapacity,TotalAttempts)</code></pre>
 </div>
