@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 ---
 title: "Model-Performance-Linear"
 author: "Rich McGowan"
@@ -57,64 +56,5 @@ predict_linear <- predict(fit, test_data_minimized)
 MeanAbsoluteError <- MAE(test_data_minimized$EnrlTotal,predict_linear)
 print(paste("The Mean Absolute Error of the Prediction is", round(MeanAbsoluteError, digits = 2)))
 ```
-=======
----
-title: "Model-Performance-Linear"
-author: "Rich McGowan"
-date: "April 24, 2018"
-output: 
-       html_document:
-                  toc: FALSE
-                  theme: united
----
-#### The purpose of this analysis is to perform and assess a Multiple Linear Regression model for predicting Total Course Enrollment.
 
-#### The first step is to initialize the project: After the project has been created in the target directory make sure the ProjectTemplate package is installed and loaded.  The COURSE_CAPACITY_DATA.csv and TOTAL_ENRL_ATTEMPTS_BY_COURSE.csv files have been moved into the Data folder of the project template and will be loaded into the environment.  This will also load all necessary packages (designated in/by the Config file of the project).
-```{r load project, include=FALSE}
-library('ProjectTemplate')
-load.project()
-```
-
-#### The COURSE_CAPACITY_DATA.csv file and the TOTAL_ENRL_ATTEMPTS_BY_COURSE file.csv contain approximately 13K rows of course schedule statisics for terms between Fall of 2016 and the Spring of 2018.  The data frame is intended to facilitate the prediction of ultimate Enrollment Totals per scheduled course (for all primary/enrollmment scheduled sections). 
-```{r convert raw data frames to local data frames}
-course_capacity_local <- tbl_df(COURSE.CAPACITY.DATA)
-total_enrl_attempts_local <- tbl_df(TOTAL.ENRL.ATTEMPTS.BY.COURSE)
-```
-
-#### Combine the appropriate columns in the 2 data frames (i.e. add the TotalAttempts column from total_enrl_attempts_local to course_capacity_local matching on CourseID and Term).
-```{r}
-combined_data_local <- merge(course_capacity_local, total_enrl_attempts_local, by= c('CourseID','Term'))
-```
-
-#### Filter all pre Spring 2018 rows from the combined_data_local dataframe to isolate a (Fall 2016 - Fall 2017 only) training dataset.  Filter all Spring 2018 rows from the combined_data_local dataframe to isolate a (Spring 2018 only) dataset.  
-```{r segregate the training and test datasets}
-training_data_local <- combined_data_local %>% filter(Term < 2182)
-test_data_local <- combined_data_local %>% filter(Term >= 2182)
-```
-
-#### Exclude columns of the training_data_local and test_data_local datasets to minimized them so they only include variables of interest to the model.  The resulting training_data_minimzed dataset will then be used for some graphical exploratory analysis using the "pairs" function.
-```{r }
-training_data_minimized <- training_data_local %>% select(EnrlTotal, TotalSections, TotalCapacity,TotalAttempts)
-test_data_minimized <- test_data_local %>% select(EnrlTotal, TotalSections, TotalCapacity,TotalAttempts)
-pairs(training_data_minimized)
-```
-
-#### Use the "cor" function to show a correlation matrix for further exploratory analysis.
-```{r}
-cor(training_data_minimized)
-```
-
-#### Create a Multiple Linear Regression Model to explain the relationship between Response Variable (EnrlTotal-from the training_data_local dataset) and several explanatory variables from the traning_data_local dataset.
-```{r Multiple Linear Regression Model}
-fit <- lm(EnrlTotal ~ TotalSections + TotalCapacity + TotalAttempts, data = training_data_minimized)
-summary(fit)
-```
-
-#### Run the predict function on the test dataset and analyze the results by calculating the Mean Absolute Error of the prediction.
-```{r}
-predict_linear <- predict(fit, test_data_minimized)
-MeanAbsoluteError <- MAE(test_data_minimized$EnrlTotal,predict_linear)
-print(paste("The Mean Absolute Error of the Prediction is", round(MeanAbsoluteError, digits = 2)))
-```
->>>>>>> 661a2db5cd03c3adb1087e22bdc1af4912d8694c
 ## CONCLUSION-The Multiple Linear Regression summary output suggests that each of the 3 features: 1. Total Scheduled Sections, 2. Total Class Capacity and 3. Total Enrollment Attempts have a signifcant impact on predicting Total Course Enrollment.  That is, each of the features have a strong linear relationship to Total Course Enrollment.  Also the Mean Absolute Error of the Prediction is the acceptable range because there are courses and class sections with very large enrollment capacities.
