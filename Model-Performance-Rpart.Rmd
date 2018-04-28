@@ -18,7 +18,7 @@ library(rpart.plot)
 
 ```
 
-#### The COURSE_CAPACITY_DATA.csv file and the TOTAL_ENRL_ATTEMPTS_BY_COURSE file.csv contain approximately 13K rows of course schedule statisics for terms between Fall of 2016 and the Spring of 2018.  The data frame is intended to facilitate the prediction of ultimate Enrollment Totals per scheduled course (for all primary/enrollmment scheduled sections). 
+#### The COURSE_CAPACITY_DATA.csv file and the TOTAL_ENRL_ATTEMPTS_BY_COURSE file.csv contain approximately 13K rows of course schedule statisics for terms between Fall of 2016 and the Spring of 2018.  The data frame is intended to facilitate the prediction of ultimate Course Enrollment Totals for a given term (for all primary/enrollmment scheduled sections).
 ```{r convert raw data frames to local data frames}
 course_capacity_local <- tbl_df(COURSE.CAPACITY.DATA)
 total_enrl_attempts_local <- tbl_df(TOTAL.ENRL.ATTEMPTS.BY.COURSE)
@@ -59,4 +59,4 @@ MeanAbsoluteError <- MAE(test_data_minimized$EnrlTotal,predict_rpart)
 print(paste("The Mean Absolute Error of the Prediction is", round(MeanAbsoluteError, digits = 2)))
 ```
 
-## CONCLUSION-The Recursive Partition Regression Tree Model resulted in a Mean Absolute Error of the predicted Total Enrollment by Course is well witin the acceptable range since there are courses and class sections that have very large enrollment capacities.  
+## CONCLUSION-The Recursive Partition Regression Tree Model resulted in a Mean Absolute Error of the predicted Total Enrollment by Course is well witin the acceptable range since there are courses (scheduled class sections combined) that have very large enrollment capacities.
