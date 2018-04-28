@@ -47,7 +47,7 @@ fit_rpart <- rpart(EnrlTotal ~ ., data = training_data_minimized, method = "anov
 fit_rpart
 ```
 
-#### Plot the resulting tree using the rpart.plot function to display a more succint plot of the tree
+#### Plot the resulting rpart tree using the rpart.plot function to display a more succint plot of the tree
 ```{r}
 rpart.plot(fit_rpart, type = 3, digits = 3, fallen.leaves = TRUE)
 ```
