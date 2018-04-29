@@ -2,6 +2,6 @@
 
 ---
 
-This is the repository for my CSX415 assignments. This replaces the initial README markdown file created during the original fork.
+This is the repository for my CSX415 assignments. This repository replaces the initial README markdown file created by the original fork.
 
 
