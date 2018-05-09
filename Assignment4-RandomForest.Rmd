@@ -55,4 +55,4 @@ RMSE_rf <- RMSE(final_testing_set$EnrlTotal,predict_rf)
 print(paste("The Mean Absolute Error of the Prediction is", round(MAE_rf, digits = 2)))
 print(paste("The Root Mean Squared Error of the Prediction is", round(RMSE_rf, digits = 2)))
 ```
-
+#### The Random Forest Model predicts Total Enrollment in Graduate Data Science courses within an acceptable range.  The MAE and RMSE are improved over over the prior models (linear and rpart).
