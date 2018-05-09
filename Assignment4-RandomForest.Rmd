@@ -1,0 +1,58 @@
+---
+title: "Assignment 4: Random Forest Model for Data Science Course Enrollment Predictions"
+author: "Rich McGowan"
+date: "May 8, 2018"
+output: 
+  html_document:
+  toc: FALSE
+theme: united
+---
+#### Use the caret package to employ bootstrap sampling techniques and  Random Forest Model to predict Total Enrollments Graduate Data Science Courses for Summer 2018 (based on enrollment data for those courses from Fall of 2016 - Spring of 2018)  
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+```{r require necessary packages, include=FALSE}
+library(dplyr)
+library(randomForest)
+library(caret)
+library(doParallel)
+library(tidyr)
+```
+
+```{r import and filter data, include=TRUE}
+#Import the *.csv file and Create a local data frame
+course_capacity_local <- tbl_df(read.csv(file = "c:/Users/Richard/Desktop/csx415-project/data/COURSE_CAPACITY_DATA.csv",header = TRUE))
+#Filter the combined local data frame into training and test data sets
+training_data_local <- course_capacity_local %>% filter(Term <= 2182)
+test_data_local <- course_capacity_local %>% filter(Term > 2182)
+#Minimize the columns of the training and test data sets
+training_data_minimized <- training_data_local %>% select(CourseID, Subject, Course, Term, EnrlTotal, TotalSections, TotalCapacity)
+test_data_minimized <- test_data_local %>% select(CourseID, Subject, Course, Term, EnrlTotal, TotalSections, TotalCapacity)
+#Change the CourseID field from num to character in both minimized data frames
+training_data_minimized$CourseID <- as.character(training_data_minimized$CourseID)
+test_data_minimized$CourseID <- as.character(test_data_minimized$CourseID)
+#Filter out courses that have the DATASCI Subject Code 
+#These statements can be edited to analyze any desired Subject Area
+final_training_set <- training_data_minimized %>% 
+  filter(Subject == 'DATASCI')
+final_testing_set <- test_data_minimized %>% 
+  filter(Subject == 'DATASCI')
+final_data_set <- bind_rows(final_training_set, final_testing_set)
+```
+
+```{r random forest sampling and predicting using a random forest model, include=TRUE, echo=TRUE}
+#Use the train function from the caret package to create samples and create a random forest model
+c1 <- makeCluster(detectCores())
+control <- trainControl(method = "boot",number = 10, allowParallel = TRUE)
+rf_fit <- train(EnrlTotal~CourseID+Term+TotalSections+TotalCapacity,data = final_training_set,method = "rf",trControl = control)
+stopCluster(c1)
+summary(rf_fit)
+predict_rf <- predict(rf_fit, final_testing_set)
+MAE_rf <- MAE(final_testing_set$EnrlTotal,predict_rf)
+RMSE_rf <- RMSE(final_testing_set$EnrlTotal,predict_rf)
+print(paste("The Mean Absolute Error of the Prediction is", round(MAE_rf, digits = 2)))
+print(paste("The Root Mean Squared Error of the Prediction is", round(RMSE_rf, digits = 2)))
+```
+
